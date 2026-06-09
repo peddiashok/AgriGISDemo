@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,714 +8,164 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --earth-dark: #0d1117;
-    --earth-mid: #131c24;
-    --earth-panel: #1a2632;
-    --topo-green: #2ecc8a;
-    --topo-green-dim: #1a7a52;
-    --satellite-blue: #4a9eff;
-    --contour: #263545;
-    --text-primary: #e8f0fe;
-    --text-secondary: #8fa8c0;
-    --text-muted: #4d6a80;
-    --accent-warm: #f0a04b;
+    --bg: #ffffff;
+    --bg-soft: #f5f7fa;
+    --bg-panel: #eef2f7;
+    --topo-green: #1a9e6b;
+    --topo-green-dim: #0d6b47;
+    --satellite-blue: #1d6fcc;
+    --border: #d6dfe8;
+    --text-primary: #0f1c2e;
+    --text-secondary: #4a6380;
+    --text-muted: #8fa8c0;
+    --accent-warm: #d97706;
   }
-
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--earth-dark);
-    color: var(--text-primary);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  /* ── TOPOGRAPHIC HERO ── */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    background: radial-gradient(ellipse at 60% 40%, #0d2033 0%, var(--earth-dark) 70%);
-  }
-
-  .topo-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.18;
-    background-image:
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 38px, rgba(46,204,138,.35) 39px, transparent 40px),
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 58px, rgba(46,204,138,.2) 59px, transparent 60px),
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 78px, rgba(46,204,138,.15) 79px, transparent 80px),
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 108px, rgba(46,204,138,.1) 109px, transparent 110px),
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 148px, rgba(46,204,138,.07) 149px, transparent 150px),
-      repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 198px, rgba(46,204,138,.05) 199px, transparent 200px);
-  }
-
-  .grid-lines {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(46,204,138,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(46,204,138,.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    width: 100%;
-  }
-
-  .hero-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    color: var(--topo-green);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 28px; height: 1px;
-    background: var(--topo-green);
-  }
-
-  .hero-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(48px, 6vw, 80px);
-    line-height: 1.05;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-  .hero-name em {
-    font-style: italic;
-    color: var(--topo-green);
-  }
-
-  .hero-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    color: var(--text-secondary);
-    margin-bottom: 32px;
-    letter-spacing: 0.02em;
-  }
-
-  .hero-summary {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.75;
-    max-width: 460px;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--topo-green);
-    color: var(--earth-dark);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.04em;
-    padding: 13px 28px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: #3adfaa; transform: translateY(-1px); }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid var(--contour);
-    color: var(--text-secondary);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
-    padding: 13px 28px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--topo-green); color: var(--topo-green); }
-
-  /* ── STATS CARD ── */
-  .hero-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: var(--contour);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--contour);
-  }
-
-  .stat-cell {
-    background: var(--earth-panel);
-    padding: 32px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    transition: background 0.2s;
-  }
-  .stat-cell:hover { background: #1e2f3f; }
-
-  .stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 42px;
-    line-height: 1;
-    color: var(--topo-green);
-  }
-
-  .stat-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-top: 6px;
-  }
-
-  .stat-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-    line-height: 1.4;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(13,17,23,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--contour);
-    padding: 0 48px;
-  }
-
-  .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-  }
-
-  .nav-logo {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--topo-green);
-    letter-spacing: 0.1em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-decoration: none;
-    letter-spacing: 0.06em;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--topo-green); }
-
-  .nav-contact {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-contact:hover { color: var(--topo-green); }
-
-  /* ── SECTIONS ── */
-  section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 96px 48px;
-  }
-
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--topo-green);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    max-width: 60px;
-    height: 1px;
-    background: var(--topo-green-dim);
-  }
-
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(32px, 4vw, 52px);
-    color: var(--text-primary);
-    margin-bottom: 56px;
-    line-height: 1.1;
-  }
-
-  /* ── EXPERIENCE TIMELINE ── */
-  .timeline {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--topo-green), transparent);
-  }
-
-  .tl-item {
-    position: relative;
-    padding: 0 0 48px 40px;
-  }
-
-  .tl-dot {
-    position: absolute;
-    left: -5px;
-    top: 6px;
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--earth-dark);
-    border: 2px solid var(--topo-green);
-    transition: background 0.2s;
-  }
-
-  .tl-item:hover .tl-dot { background: var(--topo-green); }
-
-  .tl-date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-    margin-bottom: 6px;
-  }
-
-  .tl-role {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-  }
-
-  .tl-org {
-    font-size: 14px;
-    color: var(--satellite-blue);
-    margin-bottom: 12px;
-  }
-
-  .tl-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-
-  .tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    padding: 4px 10px;
-    border-radius: 2px;
-    background: rgba(46,204,138,0.08);
-    color: var(--topo-green);
-    border: 1px solid rgba(46,204,138,0.2);
-    letter-spacing: 0.06em;
-  }
-
-  .tl-bullets {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-  }
-
-  .tl-bullets li {
-    font-size: 14px;
-    color: var(--text-secondary);
-    padding-left: 16px;
-    position: relative;
-    line-height: 1.55;
-  }
-
-  .tl-bullets li::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: var(--topo-green-dim);
-    font-size: 10px;
-    top: 3px;
-  }
-
-  /* ── PROJECTS GRID ── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 2px;
-    background: var(--contour);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .project-card {
-    background: var(--earth-panel);
-    padding: 36px 32px;
-    transition: background 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .project-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 0;
-    background: var(--topo-green);
-    transition: height 0.3s ease;
-  }
-
-  .project-card:hover { background: #1c2d3d; }
-  .project-card:hover::before { height: 100%; }
-
-  .project-icon {
-    font-size: 28px;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .project-name {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-
-  .project-desc {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-
-  .project-impact {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--accent-warm);
-    letter-spacing: 0.06em;
-  }
-
-  /* ── SKILLS ── */
-  .skills-layout {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-  }
-
-  .skill-group {
-    background: var(--earth-panel);
-    border: 1px solid var(--contour);
-    border-radius: 10px;
-    padding: 28px 24px;
-  }
-
-  .skill-group-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--topo-green);
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    margin-bottom: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--contour);
-  }
-
-  .skill-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .skill-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .skill-name {
-    font-size: 13px;
-    color: var(--text-secondary);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .skill-bar {
-    height: 3px;
-    background: var(--contour);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--topo-green), var(--satellite-blue));
-    border-radius: 2px;
-    transform-origin: left;
-    animation: fillBar 1.2s ease forwards;
-    transform: scaleX(0);
-  }
-
-  @keyframes fillBar {
-    to { transform: scaleX(1); }
-  }
-
-  /* ── ACHIEVEMENTS BAND ── */
-  .achievements-band {
-    background: var(--earth-panel);
-    border-top: 1px solid var(--contour);
-    border-bottom: 1px solid var(--contour);
-  }
-
-  .achievements-band section {
-    padding-top: 80px;
-    padding-bottom: 80px;
-  }
-
-  .ach-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 2px;
-    background: var(--contour);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 0;
-  }
-
-  .ach-item {
-    background: var(--earth-panel);
-    padding: 28px 24px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-
-  .ach-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 32px;
-    color: var(--topo-green);
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .ach-text {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.55;
-    margin-top: 4px;
-  }
-
-  /* ── EDUCATION ── */
-  .edu-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .edu-card {
-    border: 1px solid var(--contour);
-    border-radius: 10px;
-    padding: 28px 24px;
-    transition: border-color 0.2s;
-  }
-  .edu-card:hover { border-color: var(--topo-green-dim); }
-
-  .edu-degree {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 6px;
-    line-height: 1.35;
-  }
-
-  .edu-uni {
-    font-size: 13px;
-    color: var(--satellite-blue);
-    margin-bottom: 8px;
-  }
-
-  .edu-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--contour);
-  }
-
-  /* ── CONTACT FOOTER ── */
-  footer {
-    background: var(--earth-panel);
-    border-top: 1px solid var(--contour);
-    padding: 64px 48px;
-  }
-
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-
-  .footer-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    color: var(--text-primary);
-    margin-bottom: 6px;
-  }
-
-  .footer-tagline {
-    font-size: 14px;
-    color: var(--text-secondary);
-  }
-
-  .contact-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-end;
-  }
-
-  .contact-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .contact-link:hover { color: var(--topo-green); }
-
-  .contact-link svg {
-    width: 16px;
-    height: 16px;
-    opacity: 0.6;
-  }
-
-  .footer-copy {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 32px;
-    margin-top: 40px;
-    border-top: 1px solid var(--contour);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-align: center;
-    letter-spacing: 0.06em;
-  }
-
-  /* ── FADE IN ── */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ── DIVIDER ── */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--contour);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .hero-content { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
-    .hero-stats { grid-template-columns: 1fr 1fr; }
-    section { padding: 64px 24px; }
-    nav { padding: 0 24px; }
-    .nav-links { display: none; }
-    .skills-layout { grid-template-columns: 1fr; }
-    .edu-grid { grid-template-columns: 1fr; }
-    .contact-links { align-items: flex-start; }
-    .footer-inner { flex-direction: column; }
-    footer { padding: 48px 24px; }
-  }
-
-  @media (max-width: 600px) {
-    .hero-stats { grid-template-columns: 1fr; }
-    .projects-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fade-in { opacity: 1; transform: none; }
-    .skill-fill { animation: none; transform: scaleX(1); }
-  }
+  body { background: var(--bg); color: var(--text-primary); font-family: 'Space Grotesk', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  /* HERO stays dark */
+  .hero { position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; background:radial-gradient(ellipse at 60% 40%, #0d2033 0%, #0d1117 70%); }
+  .topo-bg { position:absolute; inset:0; opacity:0.18; background-image: repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 38px, rgba(46,204,138,.35) 39px, transparent 40px), repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 58px, rgba(46,204,138,.2) 59px, transparent 60px), repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 78px, rgba(46,204,138,.15) 79px, transparent 80px), repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 108px, rgba(46,204,138,.1) 109px, transparent 110px), repeating-radial-gradient(circle at 65% 45%, transparent 0, transparent 148px, rgba(46,204,138,.07) 149px, transparent 150px); }
+  .grid-lines { position:absolute; inset:0; background-image:linear-gradient(rgba(46,204,138,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,138,.04) 1px,transparent 1px); background-size:60px 60px; }
+  .hero-content { position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:80px 48px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; width:100%; }
+  .hero-eyebrow { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#2ecc8a; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .hero-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:#2ecc8a; }
+  .hero-name { font-family:'DM Serif Display',serif; font-size:clamp(48px,6vw,80px); line-height:1.05; color:#e8f0fe; margin-bottom:8px; }
+  .hero-name em { font-style:italic; color:#2ecc8a; }
+  .hero-title { font-size:18px; font-weight:300; color:#8fa8c0; margin-bottom:32px; }
+  .hero-summary { font-size:15px; color:#8fa8c0; line-height:1.75; max-width:460px; }
+  .hero-cta { display:flex; gap:16px; margin-top:40px; flex-wrap:wrap; }
+  .btn-primary { display:inline-flex; align-items:center; gap:8px; background:#2ecc8a; color:#0d1117; font-weight:600; font-size:14px; letter-spacing:0.04em; padding:13px 28px; border-radius:4px; text-decoration:none; transition:background .2s,transform .15s; }
+  .btn-primary:hover { background:#3adfaa; transform:translateY(-1px); }
+  .btn-ghost { display:inline-flex; align-items:center; gap:8px; border:1px solid #263545; color:#8fa8c0; font-size:14px; padding:13px 28px; border-radius:4px; text-decoration:none; transition:border-color .2s,color .2s; }
+  .btn-ghost:hover { border-color:#2ecc8a; color:#2ecc8a; }
+  .hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:#263545; border-radius:12px; overflow:hidden; }
+  .stat-cell { background:#1a2632; padding:32px 28px; display:flex; flex-direction:column; gap:4px; transition:background .2s; }
+  .stat-cell:hover { background:#1e2f3f; }
+  .stat-num { font-family:'DM Serif Display',serif; font-size:42px; line-height:1; color:#2ecc8a; }
+  .stat-label { font-family:'JetBrains Mono',monospace; font-size:11px; color:#4d6a80; text-transform:uppercase; letter-spacing:0.12em; margin-top:6px; }
+  .stat-desc { font-size:13px; color:#8fa8c0; margin-top:4px; line-height:1.4; }
+
+  /* NAV - white */
+  nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,.97); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); padding:0 48px; }
+  .nav-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .nav-logo { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--topo-green); letter-spacing:0.1em; font-weight:500; }
+  .nav-links { display:flex; gap:36px; list-style:none; }
+  .nav-links a { font-size:13px; color:var(--text-muted); text-decoration:none; letter-spacing:0.06em; transition:color .2s; }
+  .nav-links a:hover { color:var(--topo-green); }
+  .nav-contact { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-secondary); text-decoration:none; transition:color .2s; }
+  .nav-contact:hover { color:var(--topo-green); }
+
+  /* SECTIONS */
+  section { max-width:1200px; margin:0 auto; padding:96px 48px; }
+  .section-label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--topo-green); letter-spacing:0.18em; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:12px; }
+  .section-label::after { content:''; flex:1; max-width:60px; height:1px; background:var(--topo-green-dim); }
+  .section-title { font-family:'DM Serif Display',serif; font-size:clamp(32px,4vw,52px); color:var(--text-primary); margin-bottom:56px; line-height:1.1; }
+
+  /* TIMELINE */
+  .timeline { position:relative; display:flex; flex-direction:column; }
+  .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:1px; background:linear-gradient(to bottom,var(--topo-green),transparent); }
+  .tl-item { position:relative; padding:0 0 48px 40px; }
+  .tl-dot { position:absolute; left:-5px; top:6px; width:11px; height:11px; border-radius:50%; background:var(--bg); border:2px solid var(--topo-green); transition:background .2s; }
+  .tl-item:hover .tl-dot { background:var(--topo-green); }
+  .tl-date { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); letter-spacing:0.1em; margin-bottom:6px; }
+  .tl-role { font-size:18px; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+  .tl-org { font-size:14px; color:var(--satellite-blue); margin-bottom:12px; }
+  .tl-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .tag { font-family:'JetBrains Mono',monospace; font-size:10px; padding:4px 10px; border-radius:2px; background:rgba(26,158,107,.07); color:var(--topo-green); border:1px solid rgba(26,158,107,.2); letter-spacing:0.06em; }
+  .tl-bullets { list-style:none; display:flex; flex-direction:column; gap:7px; }
+  .tl-bullets li { font-size:14px; color:var(--text-secondary); padding-left:16px; position:relative; line-height:1.55; }
+  .tl-bullets li::before { content:'▸'; position:absolute; left:0; color:var(--topo-green-dim); font-size:10px; top:3px; }
+
+  /* MAP SECTION */
+  .map-section-bg { background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .map-section-bg section { padding-top:80px; padding-bottom:80px; }
+  .map-layout { display:grid; grid-template-columns:1fr 1.5fr; gap:40px; align-items:start; }
+  .exp-location-list { display:flex; flex-direction:column; gap:8px; max-height:540px; overflow-y:auto; padding-right:4px; }
+  .exp-location-list::-webkit-scrollbar { width:4px; }
+  .exp-location-list::-webkit-scrollbar-track { background:var(--bg-panel); border-radius:2px; }
+  .exp-location-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+  .loc-item { display:flex; align-items:flex-start; gap:14px; padding:14px 16px; border-radius:8px; border:1px solid var(--border); background:var(--bg); cursor:pointer; transition:border-color .2s,box-shadow .2s,background .2s; }
+  .loc-item:hover, .loc-item.active { border-color:var(--topo-green); background:#f0fdf8; box-shadow:0 2px 12px rgba(26,158,107,.1); }
+  .loc-num { font-family:'JetBrains Mono',monospace; font-size:11px; background:var(--topo-green); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; font-weight:600; }
+  .loc-role { font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.3; }
+  .loc-place { font-size:12px; color:var(--satellite-blue); margin-top:2px; }
+  .loc-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); margin-top:3px; }
+  .map-embed { border-radius:12px; overflow:hidden; border:1px solid var(--border); box-shadow:0 4px 24px rgba(0,0,0,.08); height:540px; position:relative; }
+  .map-embed iframe { width:100%; height:100%; border:none; display:block; }
+
+  /* PROJECTS */
+  .projects-section-bg { background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .projects-section-bg section { padding-top:80px; padding-bottom:80px; }
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; }
+  .project-card { background:var(--bg); padding:32px 28px; border-radius:10px; border:1px solid var(--border); transition:border-color .2s,box-shadow .2s,transform .2s; position:relative; overflow:hidden; }
+  .project-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:0; background:var(--topo-green); transition:height .3s; }
+  .project-card:hover { border-color:var(--topo-green); box-shadow:0 4px 20px rgba(26,158,107,.1); transform:translateY(-2px); }
+  .project-card:hover::before { height:100%; }
+  .project-icon { font-size:28px; margin-bottom:16px; display:block; }
+  .project-name { font-size:17px; font-weight:600; color:var(--text-primary); margin-bottom:8px; }
+  .project-desc { font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:16px; }
+  .project-impact { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-warm); letter-spacing:0.06em; }
+
+  /* ACHIEVEMENTS */
+  .ach-section-bg { background:var(--bg-soft); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .ach-section-bg section { padding-top:72px; padding-bottom:72px; }
+  .ach-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:20px; }
+  .ach-item { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:28px 24px; display:flex; gap:14px; align-items:flex-start; }
+  .ach-num { font-family:'DM Serif Display',serif; font-size:32px; color:var(--topo-green); line-height:1; flex-shrink:0; }
+  .ach-text { font-size:13px; color:var(--text-secondary); line-height:1.55; margin-top:4px; }
+
+  /* SKILLS */
+  .skills-layout { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .skill-group { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:28px 24px; }
+  .skill-group-title { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--topo-green); text-transform:uppercase; letter-spacing:0.14em; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+  .skill-list { display:flex; flex-direction:column; gap:10px; }
+  .skill-item { display:flex; flex-direction:column; gap:5px; }
+  .skill-name { font-size:13px; color:var(--text-secondary); }
+  .skill-bar { height:3px; background:var(--bg-panel); border-radius:2px; overflow:hidden; }
+  .skill-fill { height:100%; background:linear-gradient(90deg,var(--topo-green),var(--satellite-blue)); border-radius:2px; transform-origin:left; animation:fillBar 1.2s ease forwards; transform:scaleX(0); }
+  @keyframes fillBar { to { transform:scaleX(1); } }
+
+  /* EDUCATION */
+  .edu-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .edu-card { border:1px solid var(--border); border-radius:10px; padding:28px 24px; background:var(--bg); transition:border-color .2s; }
+  .edu-card:hover { border-color:var(--topo-green); }
+  .edu-degree { font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:6px; line-height:1.35; }
+  .edu-uni { font-size:13px; color:var(--satellite-blue); margin-bottom:8px; }
+  .edu-meta { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); display:flex; justify-content:space-between; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+
+  /* FOOTER */
+  footer { background:#0f1c2e; padding:64px 48px; }
+  .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:40px; flex-wrap:wrap; }
+  .footer-name { font-family:'DM Serif Display',serif; font-size:28px; color:#fff; margin-bottom:6px; }
+  .footer-tagline { font-size:14px; color:#8fa8c0; }
+  .contact-links { display:flex; flex-direction:column; gap:10px; align-items:flex-end; }
+  .contact-link { display:flex; align-items:center; gap:10px; font-size:14px; color:#8fa8c0; text-decoration:none; transition:color .2s; }
+  .contact-link:hover { color:#2ecc8a; }
+  .contact-link svg { width:16px; height:16px; opacity:0.6; }
+  .footer-copy { max-width:1200px; margin:40px auto 0; padding-top:32px; border-top:1px solid #263545; font-family:'JetBrains Mono',monospace; font-size:11px; color:#4d6a80; text-align:center; letter-spacing:0.06em; }
+  .divider { border:none; border-top:1px solid var(--border); }
+
+  /* FADE IN */
+  .fade-in { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+
+  /* RESPONSIVE */
+  @media(max-width:1000px) { .map-layout { grid-template-columns:1fr; } .map-embed { height:380px; } }
+  @media(max-width:900px) { .hero-content { grid-template-columns:1fr; gap:48px; padding:64px 24px; } .hero-stats { grid-template-columns:1fr 1fr; } section { padding:64px 24px; } nav { padding:0 24px; } .nav-links { display:none; } .skills-layout { grid-template-columns:1fr; } .edu-grid { grid-template-columns:1fr; } .contact-links { align-items:flex-start; } .footer-inner { flex-direction:column; } footer { padding:48px 24px; } }
+  @media(max-width:600px) { .hero-stats { grid-template-columns:1fr; } .projects-grid { grid-template-columns:1fr; } }
+  @media(prefers-reduced-motion:reduce) { .fade-in { opacity:1; transform:none; } .skill-fill { animation:none; transform:scaleX(1); } }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <span class="nav-logo">AP // GIS</span>
     <ul class="nav-links">
       <li><a href="#experience">Experience</a></li>
+      <li><a href="#journey">Career Map</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#education">Education</a></li>
@@ -723,7 +174,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="topo-bg"></div>
   <div class="grid-lines"></div>
@@ -732,271 +182,201 @@
       <div class="hero-eyebrow">Senior GIS Technology Leader</div>
       <h1 class="hero-name">Ashok<br><em>Peddi</em></h1>
       <p class="hero-title">18 Years · Geospatial Architecture &amp; Innovation</p>
-      <p class="hero-summary">
-        Delivering geospatial solutions across government, corporate, and research sectors — from smart city integrations and agricultural land management to biodiversity conservation and remote sensing analytics.
-      </p>
+      <p class="hero-summary">Delivering geospatial solutions across government, corporate, and research sectors — from smart city integrations and agricultural land management to biodiversity conservation and remote sensing analytics.</p>
       <div class="hero-cta">
-        <a href="#projects" class="btn-primary">View Key Projects ↓</a>
+        <a href="#journey" class="btn-primary">View Career Map ↓</a>
         <a href="mailto:peddiasok@gmail.com" class="btn-ghost">Get in Touch</a>
       </div>
     </div>
-
     <div class="hero-stats">
-      <div class="stat-cell">
-        <span class="stat-num">18+</span>
-        <span class="stat-label">Years Experience</span>
-        <span class="stat-desc">Across government, corporate &amp; research</span>
-      </div>
-      <div class="stat-cell">
-        <span class="stat-num">5+</span>
-        <span class="stat-label">Smart City Modules</span>
-        <span class="stat-desc">Integrated for Bhubaneswar</span>
-      </div>
-      <div class="stat-cell">
-        <span class="stat-num">50K+</span>
-        <span class="stat-label">Citizens Served</span>
-        <span class="stat-desc">COVID-19 real-time dashboard</span>
-      </div>
-      <div class="stat-cell">
-        <span class="stat-num">40K+</span>
-        <span class="stat-label">Academic Views</span>
-        <span class="stat-desc">3,400+ followers on Academia.edu</span>
-      </div>
+      <div class="stat-cell"><span class="stat-num">18+</span><span class="stat-label">Years Experience</span><span class="stat-desc">Across government, corporate &amp; research</span></div>
+      <div class="stat-cell"><span class="stat-num">5+</span><span class="stat-label">Smart City Modules</span><span class="stat-desc">Integrated for Bhubaneswar</span></div>
+      <div class="stat-cell"><span class="stat-num">50K+</span><span class="stat-label">Citizens Served</span><span class="stat-desc">COVID-19 real-time dashboard</span></div>
+      <div class="stat-cell"><span class="stat-num">40K+</span><span class="stat-label">Academic Views</span><span class="stat-desc">3,400+ followers on Academia.edu</span></div>
     </div>
   </div>
 </div>
 
-<!-- EXPERIENCE -->
 <section id="experience">
   <div class="section-label">Career Timeline</div>
   <h2 class="section-title">Professional Experience</h2>
-
   <div class="timeline">
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">NOV 2021 — PRESENT</div>
       <div class="tl-role">Group Manager – GIS</div>
-      <div class="tl-org">MPSEDC, Madhya Pradesh</div>
-      <div class="tl-tags">
-        <span class="tag">AgriGIS</span>
-        <span class="tag">E-Girdawari</span>
-        <span class="tag">Photoanalytics</span>
-        <span class="tag">iKrishi</span>
-        <span class="tag">MPSSDI</span>
-      </div>
+      <div class="tl-org">MPSEDC · Bhopal, Madhya Pradesh</div>
+      <div class="tl-tags"><span class="tag">AgriGIS</span><span class="tag">E-Girdawari</span><span class="tag">Photoanalytics</span><span class="tag">iKrishi</span><span class="tag">MPSSDI</span></div>
       <ul class="tl-bullets">
         <li>Leading AgriGIS platform for crop monitoring and agricultural land management across Madhya Pradesh</li>
         <li>Managing E-Girdawari digital land records system, digitizing revenue and parcel data state-wide</li>
         <li>Overseeing Photoanalytics for satellite imagery analysis and automated feature extraction</li>
-        <li>Coordinating iKrishi, delivering geo-enabled advisory services, weather, and market intelligence to farmers</li>
+        <li>Coordinating iKrishi, delivering geo-enabled advisory, weather, and market intelligence to farmers</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">NOV 2019 — NOV 2021</div>
       <div class="tl-role">Technical Lead – GIS &amp; Project Management</div>
-      <div class="tl-org">Quantala Inc</div>
-      <div class="tl-tags">
-        <span class="tag">Smart City</span>
-        <span class="tag">COVID Analytics</span>
-        <span class="tag">Cisco Kinetics</span>
-        <span class="tag">ArcGIS JS API</span>
-      </div>
+      <div class="tl-org">Quantala Inc · Bhubaneswar, Odisha</div>
+      <div class="tl-tags"><span class="tag">Smart City</span><span class="tag">COVID Analytics</span><span class="tag">Cisco Kinetics</span><span class="tag">ArcGIS JS API</span></div>
       <ul class="tl-bullets">
-        <li>Managed Bhubaneswar One GIS Portal: maintenance, data publishing, and JS API custom development</li>
-        <li>Deployed CoVER COVID-19 analytics dashboard, processing 10,000+ daily updates for 50,000+ citizens</li>
+        <li>Managed Bhubaneswar One GIS Portal including maintenance, data publishing, and JS API custom development</li>
+        <li>Deployed CoVER COVID-19 analytics dashboard processing 10,000+ daily updates for 50,000+ citizens</li>
         <li>Integrated 5+ smart city modules (surveillance, WiFi, DMS, AVTS, Smart Environment) into Cisco Kinetics for Cities</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">NOV 2018 — NOV 2019</div>
       <div class="tl-role">Manager – Project Management</div>
-      <div class="tl-org">BT Data &amp; Surveying Services Pvt. Ltd., Noida</div>
-      <div class="tl-tags">
-        <span class="tag">US Clients</span>
-        <span class="tag">SQL Server</span>
-        <span class="tag">ArcGIS Server</span>
-      </div>
+      <div class="tl-org">BT Data &amp; Surveying Services Pvt. Ltd. · Noida, UP</div>
+      <div class="tl-tags"><span class="tag">US Clients</span><span class="tag">SQL Server</span><span class="tag">ArcGIS Server</span></div>
       <ul class="tl-bullets">
         <li>Led 8-member team delivering GIS projects for US-based clients across the full project lifecycle</li>
         <li>Optimized large-scale database operations with SQL Server for search, query, update, and retrieval</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">MAR 2018 — OCT 2018</div>
       <div class="tl-role">GIS Instructor</div>
-      <div class="tl-org">Microcenter / ESRI-Bahrain</div>
-      <div class="tl-tags">
-        <span class="tag">ArcGIS Training</span>
-        <span class="tag">3D Laser Scanning</span>
-        <span class="tag">FARO Focus S150</span>
-      </div>
+      <div class="tl-org">Microcenter / ESRI-Bahrain · Manama, Bahrain</div>
+      <div class="tl-tags"><span class="tag">ArcGIS Training</span><span class="tag">3D Laser Scanning</span><span class="tag">FARO Focus S150</span></div>
       <ul class="tl-bullets">
         <li>Delivered ArcGIS Level 1–4 courses to university students and government professionals</li>
         <li>Collected and processed 3D point cloud data using FARO Focus S 150 Scanner</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">2017 — 2018</div>
       <div class="tl-role">State Technical Expert – GIS</div>
-      <div class="tl-org">Society for Rural Development, Telangana (Neeranchal / World Bank)</div>
-      <div class="tl-tags">
-        <span class="tag">Watershed Mgmt</span>
-        <span class="tag">ArcHydro</span>
-        <span class="tag">ArcGIS Online</span>
-      </div>
+      <div class="tl-org">Society for Rural Development · Hyderabad, Telangana</div>
+      <div class="tl-tags"><span class="tag">Watershed Mgmt</span><span class="tag">ArcHydro</span><span class="tag">ArcGIS Online</span></div>
       <ul class="tl-bullets">
         <li>Built web and mobile map applications using ArcGIS Online and Portal for watershed planning</li>
         <li>Developed drainage networks using Spatial Analyst and ArcHydro supporting state-level policy decisions</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">2012 — 2017</div>
       <div class="tl-role">Associate – GIS</div>
-      <div class="tl-org">Cognizant, Hyderabad</div>
-      <div class="tl-tags">
-        <span class="tag">Escrow Spatial</span>
-        <span class="tag">Flood Analysis</span>
-        <span class="tag">Geodatabase</span>
-      </div>
+      <div class="tl-org">Cognizant · Hyderabad, Telangana</div>
+      <div class="tl-tags"><span class="tag">Escrow Spatial</span><span class="tag">Flood Analysis</span><span class="tag">Geodatabase</span></div>
       <ul class="tl-bullets">
         <li>Performed quality analysis of parcel mapping across large-scale projects</li>
         <li>Conducted spatial and multi-criteria decision analysis for flood risk assessment</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">2011 — 2012</div>
       <div class="tl-role">Visiting Researcher – Erasmus Mundus Fellow</div>
-      <div class="tl-org">ISEGI, University of New Lisbon, Portugal</div>
-      <div class="tl-tags">
-        <span class="tag">ArcGIS Server</span>
-        <span class="tag">Remote Sensing</span>
-        <span class="tag">Environmental GIS</span>
-      </div>
+      <div class="tl-org">ISEGI, University of New Lisbon · Lisbon, Portugal</div>
+      <div class="tl-tags"><span class="tag">ArcGIS Server</span><span class="tag">Remote Sensing</span><span class="tag">Environmental GIS</span></div>
       <ul class="tl-bullets">
-        <li>Developed and disseminated Mozambique salt pan maps using ArcGIS Server for environmental monitoring</li>
+        <li>Developed Mozambique salt pan maps using ArcGIS Server for environmental monitoring</li>
         <li>Taught Remote Sensing and GIS fundamentals to Master's students in Geospatial Technologies</li>
       </ul>
     </div>
-
     <div class="tl-item fade-in">
       <div class="tl-dot"></div>
       <div class="tl-date">2008 — 2011</div>
       <div class="tl-role">Senior Research Fellow</div>
-      <div class="tl-org">National Remote Sensing Centre (NRSC), ISRO</div>
-      <div class="tl-tags">
-        <span class="tag">ISRO</span>
-        <span class="tag">Biodiversity</span>
-        <span class="tag">Phytosoft</span>
-        <span class="tag">SPLAM</span>
-        <span class="tag">VB.NET</span>
-      </div>
+      <div class="tl-org">National Remote Sensing Centre (NRSC/ISRO) · Hyderabad, Telangana</div>
+      <div class="tl-tags"><span class="tag">ISRO</span><span class="tag">Biodiversity</span><span class="tag">Phytosoft</span><span class="tag">SPLAM</span><span class="tag">VB.NET</span></div>
       <ul class="tl-bullets">
         <li>Developed Phytosoft — phytosociological data analysis software using VB.NET, MapWindow, and PostgreSQL</li>
         <li>Created SPLAM (Spatial Landscape Modeling) tool in ArcGIS Desktop with VBA for landscape analysis</li>
         <li>Generated geospatial vegetation database covering 500+ km² in Leh and Ladakh region</li>
       </ul>
     </div>
-
   </div>
 </section>
 
 <hr class="divider">
 
+<!-- CAREER JOURNEY MAP -->
+<div class="map-section-bg" id="journey">
+  <section>
+    <div class="section-label">Global Footprint</div>
+    <h2 class="section-title" style="margin-bottom:40px;">Career Journey Map</h2>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:32px;margin-top:-40px;">Click any location to explore it on the map — from Hyderabad to Lisbon, each pin marks a chapter in an 18-year geospatial journey.</p>
+    <div class="map-layout">
+      <div class="exp-location-list">
+        <div class="loc-item active" onclick="showOnMap('MPSEDC+Bhopal+Madhya+Pradesh+India', 14, this)">
+          <div class="loc-num">1</div>
+          <div class="loc-info"><div class="loc-role">Group Manager – GIS</div><div class="loc-place">MPSEDC · Bhopal, Madhya Pradesh</div><div class="loc-date">NOV 2021 — PRESENT</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('DLF+Cyber+City+Bhubaneswar+Odisha+India', 13, this)">
+          <div class="loc-num">2</div>
+          <div class="loc-info"><div class="loc-role">Technical Lead – GIS &amp; PM</div><div class="loc-place">Quantala Inc · Bhubaneswar, Odisha</div><div class="loc-date">NOV 2019 — NOV 2021</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('Sector+63+Noida+Uttar+Pradesh+India', 13, this)">
+          <div class="loc-num">3</div>
+          <div class="loc-info"><div class="loc-role">Manager – Project Management</div><div class="loc-place">BT Data &amp; Surveying · Noida, UP</div><div class="loc-date">NOV 2018 — NOV 2019</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('Manama+Bahrain+GIS+Office', 12, this)">
+          <div class="loc-num">4</div>
+          <div class="loc-info"><div class="loc-role">GIS Instructor</div><div class="loc-place">Microcenter / ESRI · Manama, Bahrain</div><div class="loc-date">MAR 2018 — OCT 2018</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('Rajendranagar+Hyderabad+Telangana+Rural+Development', 13, this)">
+          <div class="loc-num">5</div>
+          <div class="loc-info"><div class="loc-role">State Technical Expert – GIS</div><div class="loc-place">Rural Development · Hyderabad, Telangana</div><div class="loc-date">2017 — 2018</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('Cognizant+Gachibowli+Hyderabad+Telangana', 14, this)">
+          <div class="loc-num">6</div>
+          <div class="loc-info"><div class="loc-role">Associate – GIS</div><div class="loc-place">Cognizant · Gachibowli, Hyderabad</div><div class="loc-date">2012 — 2017</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('ISEG+Lisbon+School+Economics+Management+Portugal', 14, this)">
+          <div class="loc-num">7</div>
+          <div class="loc-info"><div class="loc-role">Visiting Researcher (Erasmus Fellow)</div><div class="loc-place">ISEGI · Lisbon, Portugal</div><div class="loc-date">2011 — 2012</div></div>
+        </div>
+        <div class="loc-item" onclick="showOnMap('National+Remote+Sensing+Centre+NRSC+ISRO+Hyderabad', 14, this)">
+          <div class="loc-num">8</div>
+          <div class="loc-info"><div class="loc-role">Senior Research Fellow</div><div class="loc-place">NRSC / ISRO · Hyderabad, Telangana</div><div class="loc-date">2008 — 2011</div></div>
+        </div>
+      </div>
+      <div class="map-embed">
+        <iframe id="career-map"
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU3Mho&q=MPSEDC+Bhopal+Madhya+Pradesh+India&zoom=14"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+</div>
+
 <!-- KEY PROJECTS -->
-<section id="projects">
-  <div class="section-label">Impact Portfolio</div>
-  <h2 class="section-title">Key Projects</h2>
-
-  <div class="projects-grid">
-
-    <div class="project-card fade-in">
-      <span class="project-icon">🌾</span>
-      <div class="project-name">AgriGIS &amp; iKrishi Platform</div>
-      <div class="project-desc">Geo-enabled agricultural land management system for Madhya Pradesh — digital land records, crop monitoring, and farmer advisory services integrated into a single platform.</div>
-      <div class="project-impact">▸ State-wide deployment · Madhya Pradesh</div>
+<div class="projects-section-bg" id="projects">
+  <section>
+    <div class="section-label">Impact Portfolio</div>
+    <h2 class="section-title">Key Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card fade-in"><span class="project-icon">🌾</span><div class="project-name">AgriGIS &amp; iKrishi Platform</div><div class="project-desc">Geo-enabled agricultural land management for Madhya Pradesh — digital land records, crop monitoring, and farmer advisory services in a single platform.</div><div class="project-impact">▸ State-wide deployment · Madhya Pradesh</div></div>
+      <div class="project-card fade-in"><span class="project-icon">🦠</span><div class="project-name">COVID-19 Analytics Dashboard</div><div class="project-desc">Real-time pandemic monitoring for Bhubaneswar Municipal Corporation, processing 10,000+ daily updates for over 50,000 citizens.</div><div class="project-impact">▸ 50K+ citizens · 10K+ daily updates</div></div>
+      <div class="project-card fade-in"><span class="project-icon">🏙️</span><div class="project-name">Bhubaneswar Smart City Integration</div><div class="project-desc">Integration of 5+ smart city modules — surveillance, WiFi, DMS, AVTS, and Smart Environment — into the Cisco Kinetics for Cities IoT platform.</div><div class="project-impact">▸ 5 modules · Cisco Kinetics Platform</div></div>
+      <div class="project-card fade-in"><span class="project-icon">📜</span><div class="project-name">E-Girdawari Digital Land Records</div><div class="project-desc">Statewide digitization of revenue records and land parcel data for Madhya Pradesh, enabling transparent and accessible government land management.</div><div class="project-impact">▸ State-wide land record digitization</div></div>
+      <div class="project-card fade-in"><span class="project-icon">🌿</span><div class="project-name">Phytosoft &amp; SPLAM (ISRO/DoS-DBT)</div><div class="project-desc">Custom biodiversity analysis tools for ISRO's landscape-level characterization project, covering 500+ km² in the Leh and Ladakh region.</div><div class="project-impact">▸ 500+ km² · Leh &amp; Ladakh</div></div>
+      <div class="project-card fade-in"><span class="project-icon">💧</span><div class="project-name">Neeranchal Watershed Management</div><div class="project-desc">World Bank–assisted project building web/mobile GIS apps and drainage network models using ArcHydro to inform watershed planning in Telangana.</div><div class="project-impact">▸ World Bank project · Telangana</div></div>
     </div>
-
-    <div class="project-card fade-in">
-      <span class="project-icon">🦠</span>
-      <div class="project-name">COVID-19 Analytics Dashboard</div>
-      <div class="project-desc">Real-time pandemic monitoring for Bhubaneswar Municipal Corporation, processing 10,000+ daily record updates and delivering actionable data to over 50,000 citizens.</div>
-      <div class="project-impact">▸ 50K+ citizens · 10K+ daily updates</div>
-    </div>
-
-    <div class="project-card fade-in">
-      <span class="project-icon">🏙️</span>
-      <div class="project-name">Bhubaneswar Smart City Integration</div>
-      <div class="project-desc">Integration of 5+ smart city modules — surveillance, WiFi, Digital Messaging, AVTS, and Smart Environment — into the Cisco Kinetics for Cities IoT platform.</div>
-      <div class="project-impact">▸ 5 modules · Cisco Kinetics Platform</div>
-    </div>
-
-    <div class="project-card fade-in">
-      <span class="project-icon">📜</span>
-      <div class="project-name">E-Girdawari Digital Land Records</div>
-      <div class="project-desc">Statewide digitization of revenue records and land parcel data for Madhya Pradesh, enabling transparent and accessible government land management.</div>
-      <div class="project-impact">▸ State-wide land record digitization</div>
-    </div>
-
-    <div class="project-card fade-in">
-      <span class="project-icon">🌿</span>
-      <div class="project-name">Phytosoft &amp; SPLAM (ISRO/DoS-DBT)</div>
-      <div class="project-desc">Custom biodiversity analysis software for ISRO's landscape-level characterization project, covering 500+ km² in the Leh and Ladakh region with satellite imagery.</div>
-      <div class="project-impact">▸ 500+ km² · Leh &amp; Ladakh</div>
-    </div>
-
-    <div class="project-card fade-in">
-      <span class="project-icon">💧</span>
-      <div class="project-name">Neeranchal Watershed Management</div>
-      <div class="project-desc">World Bank–assisted project for Telangana, building web/mobile GIS applications and drainage network models using ArcHydro to inform watershed planning at state level.</div>
-      <div class="project-impact">▸ World Bank project · Telangana</div>
-    </div>
-
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- ACHIEVEMENTS -->
-<div class="achievements-band">
+<div class="ach-section-bg">
   <section>
     <div class="section-label">By the Numbers</div>
-    <h2 class="section-title" style="margin-bottom: 40px;">Key Achievements</h2>
+    <h2 class="section-title" style="margin-bottom:40px;">Key Achievements</h2>
     <div class="ach-grid">
-      <div class="ach-item fade-in">
-        <div class="ach-num">18+</div>
-        <div class="ach-text">Years of progressive geospatial leadership</div>
-      </div>
-      <div class="ach-item fade-in">
-        <div class="ach-num">50K</div>
-        <div class="ach-text">Citizens served with COVID real-time data</div>
-      </div>
-      <div class="ach-item fade-in">
-        <div class="ach-num">40K+</div>
-        <div class="ach-text">Views on Academia.edu content</div>
-      </div>
-      <div class="ach-item fade-in">
-        <div class="ach-num">3.4K</div>
-        <div class="ach-text">Followers in GIS academic community</div>
-      </div>
-      <div class="ach-item fade-in">
-        <div class="ach-num">500+</div>
-        <div class="ach-text">km² of Ladakh region mapped for ISRO</div>
-      </div>
-      <div class="ach-item fade-in">
-        <div class="ach-num">8+</div>
-        <div class="ach-text">Certifications &amp; professional recognitions</div>
-      </div>
+      <div class="ach-item fade-in"><div class="ach-num">18+</div><div class="ach-text">Years of progressive geospatial leadership</div></div>
+      <div class="ach-item fade-in"><div class="ach-num">50K</div><div class="ach-text">Citizens served with COVID real-time data</div></div>
+      <div class="ach-item fade-in"><div class="ach-num">40K+</div><div class="ach-text">Views on Academia.edu content</div></div>
+      <div class="ach-item fade-in"><div class="ach-num">3.4K</div><div class="ach-text">Followers in GIS academic community</div></div>
+      <div class="ach-item fade-in"><div class="ach-num">500+</div><div class="ach-text">km² of Ladakh region mapped for ISRO</div></div>
+      <div class="ach-item fade-in"><div class="ach-num">8+</div><div class="ach-text">Certifications &amp; professional recognitions</div></div>
     </div>
   </section>
 </div>
@@ -1006,99 +386,27 @@
   <div class="section-label">Technical Expertise</div>
   <h2 class="section-title">Skills &amp; Technologies</h2>
   <div class="skills-layout">
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">GIS Platforms</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>ArcGIS Desktop / Enterprise</span></div><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>ArcGIS Online / Portal</span></div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>ArcGIS WebAppBuilder</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>QGIS &amp; ERDAS Imagine</span></div><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
-      </div>
-    </div>
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">Development</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>JavaScript API for ArcGIS</span></div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Python</span></div><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>VB.NET / VBA</span></div><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>SQL / REST APIs</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-      </div>
-    </div>
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">Remote Sensing &amp; Analysis</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>Spatial Analyst / ArcHydro</span></div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Image Classification</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>LISS III / Landsat / Sentinel</span></div><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>3D Laser Scanning (FARO)</span></div><div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div></div>
-      </div>
-    </div>
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">Database</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>PostgreSQL 9+</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>SQL Server 2016</span></div><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>ArcSDE / Geodatabase Design</span></div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-      </div>
-    </div>
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">Domains</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>Smart Cities</span></div><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Rural Development</span></div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Biodiversity Conservation</span></div><div class="skill-bar"><div class="skill-fill" style="width:84%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Disaster Management</span></div><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
-      </div>
-    </div>
-
-    <div class="skill-group fade-in">
-      <div class="skill-group-title">Leadership</div>
-      <div class="skill-list">
-        <div class="skill-item"><div class="skill-name"><span>Solution Architecture</span></div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Stakeholder Management</span></div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Team Leadership</span></div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-        <div class="skill-item"><div class="skill-name"><span>Requirements Analysis</span></div><div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div></div>
-      </div>
-    </div>
-
+    <div class="skill-group fade-in"><div class="skill-group-title">GIS Platforms</div><div class="skill-list"><div class="skill-item"><div class="skill-name">ArcGIS Desktop / Enterprise</div><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div><div class="skill-item"><div class="skill-name">ArcGIS Online / Portal</div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div><div class="skill-item"><div class="skill-name">ArcGIS WebAppBuilder</div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div><div class="skill-item"><div class="skill-name">QGIS &amp; ERDAS Imagine</div><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div></div></div></div>
+    <div class="skill-group fade-in"><div class="skill-group-title">Development</div><div class="skill-list"><div class="skill-item"><div class="skill-name">JavaScript API for ArcGIS</div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div><div class="skill-item"><div class="skill-name">Python</div><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div><div class="skill-item"><div class="skill-name">VB.NET / VBA</div><div class="skill-bar"><div class="skill-fill" style="width:76%"></div></div></div><div class="skill-item"><div class="skill-name">SQL / REST APIs</div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div></div></div>
+    <div class="skill-group fade-in"><div class="skill-group-title">Remote Sensing &amp; Analysis</div><div class="skill-list"><div class="skill-item"><div class="skill-name">Spatial Analyst / ArcHydro</div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div><div class="skill-item"><div class="skill-name">Image Classification</div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div><div class="skill-item"><div class="skill-name">LISS III / Landsat / Sentinel</div><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div><div class="skill-item"><div class="skill-name">3D Laser Scanning (FARO)</div><div class="skill-bar"><div class="skill-fill" style="width:68%"></div></div></div></div></div>
+    <div class="skill-group fade-in"><div class="skill-group-title">Database</div><div class="skill-list"><div class="skill-item"><div class="skill-name">PostgreSQL 9+</div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div><div class="skill-item"><div class="skill-name">SQL Server 2016</div><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div><div class="skill-item"><div class="skill-name">ArcSDE / Geodatabase Design</div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div></div></div>
+    <div class="skill-group fade-in"><div class="skill-group-title">Domains</div><div class="skill-list"><div class="skill-item"><div class="skill-name">Smart Cities</div><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div><div class="skill-item"><div class="skill-name">Rural Development</div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div><div class="skill-item"><div class="skill-name">Biodiversity Conservation</div><div class="skill-bar"><div class="skill-fill" style="width:84%"></div></div></div><div class="skill-item"><div class="skill-name">Disaster Management</div><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div></div></div>
+    <div class="skill-group fade-in"><div class="skill-group-title">Leadership</div><div class="skill-list"><div class="skill-item"><div class="skill-name">Solution Architecture</div><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div><div class="skill-item"><div class="skill-name">Stakeholder Management</div><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div><div class="skill-item"><div class="skill-name">Team Leadership</div><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div><div class="skill-item"><div class="skill-name">Requirements Analysis</div><div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div></div></div></div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- EDUCATION -->
 <section id="education">
   <div class="section-label">Academic Background</div>
   <h2 class="section-title">Education</h2>
   <div class="edu-grid">
-
-    <div class="edu-card fade-in">
-      <div class="edu-degree">Corporate PG Diploma in Business Management</div>
-      <div class="edu-uni">Symbiosis Centre for Distance Learning, Pune</div>
-      <div class="edu-meta"><span>2015</span><span>63.5%</span></div>
-    </div>
-
-    <div class="edu-card fade-in">
-      <div class="edu-degree">Master's in Geoinformatics</div>
-      <div class="edu-uni">Osmania University, Hyderabad</div>
-      <div class="edu-meta"><span>2007</span><span>76.5%</span></div>
-    </div>
-
-    <div class="edu-card fade-in">
-      <div class="edu-degree">B.Sc. Mathematics, Statistics &amp; Computer Science</div>
-      <div class="edu-uni">Kakatiya University, Warangal</div>
-      <div class="edu-meta"><span>2003</span><span>60.5%</span></div>
-    </div>
-
+    <div class="edu-card fade-in"><div class="edu-degree">Corporate PG Diploma in Business Management</div><div class="edu-uni">Symbiosis Centre for Distance Learning, Pune</div><div class="edu-meta"><span>2015</span><span>63.5%</span></div></div>
+    <div class="edu-card fade-in"><div class="edu-degree">Master's in Geoinformatics</div><div class="edu-uni">Osmania University, Hyderabad</div><div class="edu-meta"><span>2007</span><span>76.5%</span></div></div>
+    <div class="edu-card fade-in"><div class="edu-degree">B.Sc. Mathematics, Statistics &amp; Computer Science</div><div class="edu-uni">Kakatiya University, Warangal</div><div class="edu-meta"><span>2003</span><span>60.5%</span></div></div>
   </div>
 </section>
 
-<!-- FOOTER / CONTACT -->
 <footer>
   <div class="footer-inner">
     <div>
@@ -1120,22 +428,22 @@
 </footer>
 
 <script>
-  // Intersection Observer for fade-in
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // Trigger skill bars inside visible groups
-        const fills = entry.target.querySelectorAll('.skill-fill');
-        fills.forEach((el, i) => {
-          el.style.animationDelay = `${i * 0.1}s`;
-        });
+        entry.target.querySelectorAll('.skill-fill').forEach((el, i) => { el.style.animationDelay = `${i * 0.1}s`; });
       }
     });
   }, { threshold: 0.12 });
-
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
 
+  function showOnMap(query, zoom, el) {
+    document.querySelectorAll('.loc-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('career-map').src =
+      `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU3Mho&q=${query}&zoom=${zoom}`;
+  }
+</script>
 </body>
 </html>
